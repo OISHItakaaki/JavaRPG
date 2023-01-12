@@ -1,0 +1,119 @@
+package level3RPG;
+
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class StartUp {
+
+   public static void main(String[] args) {
+      Hero1 h = new Hero1("勇者", 20, 100);
+      Satan1 s = new Satan1("魔王", 10, 200);
+      Item1 i = new Item1("回復薬", 3);
+
+
+
+      do {
+         System.out.println("------------------------------");
+         System.out.println(h.getheroname() + "の行動を決めろ！");
+         System.out.println("1: 攻撃");
+         System.out.println("2: 回復薬使う");
+         System.out.println("3: 必殺技");
+         System.out.print("あなたの選択は:");
+         // 勇者行動選択
+         Scanner scan = new Scanner(System.in);
+         int hand = scan.nextInt();
+         // 勇者必殺技用ランダムクラス
+         Random heroRandom = new Random();
+         int heroSpecial = heroRandom.nextInt(10);
+         // 魔王攻撃用のランダムクラス
+         Random random = new Random();
+         int satanRandom = random.nextInt(10) + 1;
+
+         switch (hand) {
+            case 1:// 勇者が魔王に対して攻撃するメソッド
+               System.out.println("勇者の攻撃:魔王に20ダメージ！");
+               System.out.println("魔王の体力:" + (s.getsatanHp() - h.getAttackValue()));
+               s.satanHp -= 20;
+
+               // 魔王から勇者への攻撃
+               int satanfinal = satanRandom * 10;
+               System.out.println("魔王の攻撃:勇者に" + satanfinal + "ダメージ!");
+               System.out.println("勇者のHP:" + (h.getHeroHp() - satanfinal));
+               h.setHeroHp(h.getHeroHp() - satanfinal);
+               break;
+
+            case 2:// 回復薬を使う
+               if (i.getCount() > 0) {
+                  // 回復薬がある場合
+                  System.out.println(h.getheroname() + "は回復薬を使用した。");
+                  System.out.println(h.getheroname() + "のHPが50回復した");
+                  h.setHeroHp(h.getHeroHp() + 50);
+                  System.out.println(h.getheroname() + "のHP:" + h.getHeroHp());
+                  i.setcount(i.getCount() - 1);
+                  System.out.println("残りの回復薬の数:" + i.getCount());
+
+                  // サタンの攻撃のメソッド
+                  int satanfinal1 = satanRandom * 10;
+                  System.out.println("魔王の攻撃:勇者に" + satanfinal1 + "ダメージ!");
+                  System.out.println("勇者のHP:" + (h.getHeroHp() - satanfinal1));
+                  h.setHeroHp(h.getHeroHp() - satanfinal1);
+
+
+                  // 回復薬がない場合
+               } else if (i.getCount() <= 0) {
+                  System.out.println("回復薬はもうない。");
+                  // サタンの攻撃のメソッド
+                  int satanfinal1 = satanRandom * 10;
+                  System.out.println("魔王の攻撃:勇者に" + satanfinal1 + "ダメージ!");
+                  System.out.println("勇者のHP:" + (h.getHeroHp() - satanfinal1));
+                  h.setHeroHp(h.getHeroHp() - satanfinal1);
+               }
+               break;
+
+
+
+            case 3:// 必殺技
+               if (heroSpecial <= 2) {
+                  System.out.println("勇者の必殺技:魔王に100ダメージ！");
+                  System.out.println("魔王の体力:" + (s.getsatanHp() - 100));
+                  s.satanHp -= 100;
+                  // サタン攻撃メソッド
+                  int satanfinal1 = satanRandom * 10;
+                  System.out.println("魔王の攻撃:勇者に" + satanfinal1 + "ダメージ!");
+                  System.out.println("勇者のHP:" + (h.getHeroHp() - satanfinal1));
+                  h.setHeroHp(h.getHeroHp() - satanfinal1);
+               } else {
+                  System.out.println("必殺技は当たらなかった。");
+                  // サタンの攻撃のメソッド
+                  int satanfinal1 = satanRandom * 10;
+                  System.out.println("魔王の攻撃:勇者に" + satanfinal1 + "ダメージ!");
+                  System.out.println("勇者のHP:" + (h.getHeroHp() - satanfinal1));
+                  h.setHeroHp(h.getHeroHp() - satanfinal1);
+               }
+
+         }
+
+
+
+      } while (h.getHeroHp() > 0 && s.getsatanHp() > 0);
+
+      if (h.getHeroHp() > 0 && s.getsatanHp() > 0) {
+
+
+      } else if (s.getsatanHp() <= 0 && h.getHeroHp() <= 0) {
+         System.out.println("激闘の末、両者ともに倒れた。勇者の命と引き換えに平穏は保たれた。");
+      }
+
+      else if (s.getsatanHp() <= 0 && h.getHeroHp() > 0) {
+         System.out.println(h.getheroname() + "によってこの世界の平和は保たれた。");
+      } else if (s.getsatanHp() > 0 && h.getHeroHp() <= 0) {
+         System.out.println(h.getheroname() + "は負けた。");
+         System.out.println("俺様の勝ちだ。ガハハハ！！");
+         System.out.println("世界は混沌の闇に飲み込まれた。");
+      }
+
+
+   }
+
+}
